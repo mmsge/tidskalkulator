@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workday Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      color: #111;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 0.3rem;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    input[type="time"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fafafa;
+      color: #111;
+      appearance: none;
+    }
+
+    input[type="time"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: 2px solid #4f7ef8;
+      border-color: transparent;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .break-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .break-row input[type="checkbox"] {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: #4f7ef8;
+      flex-shrink: 0;
+    }
+
+    .break-row label {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #444;
+      cursor: pointer;
+    }
+
+    #break-duration-field {
+      display: none;
+      margin-bottom: 1.2rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #4f7ef8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button:hover { background: #3a68e0; }
+
+    #result {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      background: #eef3ff;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    #result p {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.4rem;
+    }
+
+    #result .end-time {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #4f7ef8;
+    }
+
+    #result .summary {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Workday Calculator</h1>
+
+    <div class="field">
+      <label for="start-time">When did you start today?</label>
+      <input type="time" id="start-time" value="08:00" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="work-hours">Hours</label>
+        <input type="number" id="work-hours" min="0" max="24" value="8" />
+      </div>
+      <div class="field">
+        <label for="work-minutes">Minutes</label>
+        <input type="number" id="work-minutes" min="0" max="59" value="0" />
+      </div>
+    </div>
+
+    <div class="break-row">
+      <input type="checkbox" id="has-break" />
+      <label for="has-break">Include a break</label>
+    </div>
+
+    <div id="break-duration-field" class="field">
+      <label for="break-minutes">Break duration (minutes)</label>
+      <input type="number" id="break-minutes" min="1" max="480" value="30" />
+    </div>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result">
+      <p>You're free to go at</p>
+      <div class="end-time" id="end-time"></div>
+      <div class="summary" id="summary"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('has-break').addEventListener('change', function () {
+      document.getElementById('break-duration-field').style.display =
+        this.checked ? 'block' : 'none';
+    });
+
+    function calculate() {
+      const startRaw = document.getElementById('start-time').value;
+      if (!startRaw) return;
+
+      const [startH, startM] = startRaw.split(':').map(Number);
+      const workH = parseInt(document.getElementById('work-hours').value) || 0;
+      const workM = parseInt(document.getElementById('work-minutes').value) || 0;
+      const hasBreak = document.getElementById('has-break').checked;
+      const breakM = hasBreak ? (parseInt(document.getElementById('break-minutes').value) || 0) : 0;
+
+      const totalMinutes = startH * 60 + startM + workH * 60 + workM + breakM;
+      const endH = Math.floor(totalMinutes / 60) % 24;
+      const endM = totalMinutes % 60;
+
+      const endStr = String(endH).padStart(2, '0') + ':' + String(endM).padStart(2, '0');
+      document.getElementById('end-time').textContent = endStr;
+
+      const parts = [];
+      if (workH > 0) parts.push(workH + 'h');
+      if (workM > 0) parts.push(workM + 'min');
+      const workLabel = parts.join(' ') || '0 min';
+
+      let summaryText = `${startRaw} + ${workLabel} of work`;
+      if (hasBreak && breakM > 0) summaryText += ` + ${breakM} min break`;
+
+      document.getElementById('summary').textContent = summaryText;
+      document.getElementById('result').style.display = 'block';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') calculate();
+    });
+  </script>
+</body>
+</html>
