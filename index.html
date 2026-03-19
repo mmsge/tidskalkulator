@@ -185,6 +185,43 @@
         this.checked ? 'block' : 'none';
     });
 
+    function loadFromParams() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('start')) {
+        document.getElementById('start-time').value = params.get('start');
+      }
+      if (params.has('hours')) {
+        document.getElementById('work-hours').value = params.get('hours');
+      }
+      if (params.has('minutes')) {
+        document.getElementById('work-minutes').value = params.get('minutes');
+      }
+      if (params.has('break')) {
+        const hasBreak = params.get('break') === '1';
+        document.getElementById('has-break').checked = hasBreak;
+        document.getElementById('break-duration-field').style.display = hasBreak ? 'block' : 'none';
+      }
+      if (params.has('breakMin')) {
+        document.getElementById('break-minutes').value = params.get('breakMin');
+      }
+      if (params.has('start')) {
+        calculate();
+      }
+    }
+
+    function updateParams() {
+      const params = new URLSearchParams();
+      params.set('start', document.getElementById('start-time').value);
+      params.set('hours', document.getElementById('work-hours').value);
+      params.set('minutes', document.getElementById('work-minutes').value);
+      const hasBreak = document.getElementById('has-break').checked;
+      params.set('break', hasBreak ? '1' : '0');
+      if (hasBreak) {
+        params.set('breakMin', document.getElementById('break-minutes').value);
+      }
+      history.replaceState(null, '', '?' + params.toString());
+    }
+
     function calculate() {
       const startRaw = document.getElementById('start-time').value;
       if (!startRaw) return;
@@ -212,11 +249,15 @@
 
       document.getElementById('summary').textContent = summaryText;
       document.getElementById('result').style.display = 'block';
+
+      updateParams();
     }
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') calculate();
     });
+
+    loadFromParams();
   </script>
 </body>
 </html>
