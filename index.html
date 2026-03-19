@@ -185,7 +185,31 @@
         this.checked ? 'block' : 'none';
     });
 
-    function calculate() {
+    function loadFromParams() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('st')) document.getElementById('start-time').value = params.get('st');
+      if (params.has('wh')) document.getElementById('work-hours').value = params.get('wh');
+      if (params.has('wm')) document.getElementById('work-minutes').value = params.get('wm');
+      if (params.has('hb')) {
+        const hasBreak = params.get('hb') === '1';
+        document.getElementById('has-break').checked = hasBreak;
+        document.getElementById('break-duration-field').style.display = hasBreak ? 'block' : 'none';
+      }
+      if (params.has('bm')) document.getElementById('break-minutes').value = params.get('bm');
+      if (params.has('st') || params.has('wh') || params.has('wm')) calculate(false);
+    }
+
+    function updateParams(startRaw, workH, workM, hasBreak, breakM) {
+      const params = new URLSearchParams();
+      params.set('st', startRaw);
+      params.set('wh', workH);
+      params.set('wm', workM);
+      params.set('hb', hasBreak ? '1' : '0');
+      if (hasBreak) params.set('bm', breakM);
+      history.replaceState(null, '', '?' + params.toString());
+    }
+
+    function calculate(updateUrl = true) {
       const startRaw = document.getElementById('start-time').value;
       if (!startRaw) return;
 
@@ -194,6 +218,8 @@
       const workM = parseInt(document.getElementById('work-minutes').value) || 0;
       const hasBreak = document.getElementById('has-break').checked;
       const breakM = hasBreak ? (parseInt(document.getElementById('break-minutes').value) || 0) : 0;
+
+      if (updateUrl) updateParams(startRaw, workH, workM, hasBreak, breakM);
 
       const totalMinutes = startH * 60 + startM + workH * 60 + workM + breakM;
       const endH = Math.floor(totalMinutes / 60) % 24;
@@ -217,6 +243,8 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') calculate();
     });
+
+    loadFromParams();
   </script>
 </body>
 </html>
