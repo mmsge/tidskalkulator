@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Workday Calculator</title>
-  <meta name="description" content="Calculate when your workday ends. Enter your start time, work duration, and break — and get your finish time instantly." />
+  <title>Tidskalkulator</title>
+  <meta name="description" content="Rekn ut når arbeidsdagen din sluttar. Skriv inn starttid, arbeidstid og pause — og få sluttida med ein gong." />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Workday Calculator" />
-  <meta property="og:description" content="Calculate when your workday ends. Enter your start time, work duration, and break — and get your finish time instantly." />
+  <meta property="og:title" content="Tidskalkulator" />
+  <meta property="og:description" content="Rekn ut når arbeidsdagen din sluttar. Skriv inn starttid, arbeidstid og pause — og få sluttida med ein gong." />
   <meta property="og:type" content="website" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Workday Calculator" />
-  <meta name="twitter:description" content="Calculate when your workday ends. Enter your start time, work duration, and break — and get your finish time instantly." />
+  <meta name="twitter:title" content="Tidskalkulator" />
+  <meta name="twitter:description" content="Rekn ut når arbeidsdagen din sluttar. Skriv inn starttid, arbeidstid og pause — og få sluttida med ein gong." />
 
   <!-- Fediverse -->
   <meta name="fediverse:creator" content="@markus@skvip.lol" />
@@ -156,38 +156,38 @@
 </head>
 <body>
   <div class="card">
-    <h1>Workday Calculator</h1>
+    <h1>Tidskalkulator</h1>
 
     <div class="field">
-      <label for="start-time">When did you start today?</label>
+      <label for="start-time">Når byrja du i dag?</label>
       <input type="time" id="start-time" value="08:00" />
     </div>
 
     <div class="row">
       <div class="field">
-        <label for="work-hours">Hours</label>
+        <label for="work-hours">Timar</label>
         <input type="number" id="work-hours" min="0" max="24" value="8" />
       </div>
       <div class="field">
-        <label for="work-minutes">Minutes</label>
+        <label for="work-minutes">Minutt</label>
         <input type="number" id="work-minutes" min="0" max="59" value="0" />
       </div>
     </div>
 
     <div class="break-row">
       <input type="checkbox" id="has-break" />
-      <label for="has-break">Include a break</label>
+      <label for="has-break">Legg til pause</label>
     </div>
 
     <div id="break-duration-field" class="field">
-      <label for="break-minutes">Break duration (minutes)</label>
+      <label for="break-minutes">Pauselengd (minutt)</label>
       <input type="number" id="break-minutes" min="1" max="480" value="30" />
     </div>
 
-    <button onclick="calculate()">Calculate</button>
+    <button onclick="calculate()">Rekn ut</button>
 
     <div id="result">
-      <p>You're free to go at</p>
+      <p>Du kan gå heim klokka</p>
       <div class="end-time" id="end-time"></div>
       <div class="summary" id="summary"></div>
     </div>
@@ -258,8 +258,8 @@
       if (workM > 0) parts.push(workM + 'min');
       const workLabel = parts.join(' ') || '0 min';
 
-      let summaryText = `${startRaw} + ${workLabel} of work`;
-      if (hasBreak && breakM > 0) summaryText += ` + ${breakM} min break`;
+      let summaryText = `${startRaw} + ${workLabel} arbeid`;
+      if (hasBreak && breakM > 0) summaryText += ` + ${breakM} min pause`;
 
       document.getElementById('summary').textContent = summaryText;
       document.getElementById('result').style.display = 'block';
