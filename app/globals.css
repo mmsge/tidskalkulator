@@ -1,0 +1,131 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 420px;
+}
+
+h1 {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  color: #111;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.3rem;
+}
+
+.field {
+  margin-bottom: 1.2rem;
+}
+
+input[type="time"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #111;
+  appearance: none;
+}
+
+input[type="time"]:focus,
+input[type="number"]:focus,
+select:focus {
+  outline: 2px solid #4f7ef8;
+  border-color: transparent;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.break-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.break-row input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #4f7ef8;
+  flex-shrink: 0;
+}
+
+.break-row label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+}
+
+.break-duration-field {
+  margin-bottom: 1.2rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #4f7ef8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+button:hover { background: #3a68e0; }
+
+.result {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  background: #eef3ff;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.4rem;
+}
+
+.end-time {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4f7ef8;
+}
+
+.summary {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.4rem;
+}
